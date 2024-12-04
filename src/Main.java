@@ -1,33 +1,37 @@
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Scanner;
+import java.util.*;
 
 public class Main {
     public static void main(String[] args) {
 
         ArrayList<String> fileData = getFileData("src/Day1Input.txt");
         System.out.println(getAnswer(fileData));
-
     }
 
     public static int getAnswer(ArrayList<String> fileData) {
         ArrayList<Integer> left = new ArrayList<>();
         ArrayList<Integer> right = new ArrayList<>();
+        int answer = 0;
         for (int i = 0; i < fileData.size(); i++) {
             String line = fileData.get(i);
-            left.set(i, Integer.parseInt(line.split("   "[0])));
-            right.set(i, Integer.parseInt(line.split("   "[1])));
-            for(int j = 1; j < fileData.size();j++){
-                if (left.get(j - 1) < left.get(j)){
-                    int leftMin = left.get(j - 1);
-                    System.out.println(leftMin);
+            String[] separate = line.split("\\s+");
+            left.add(i, Integer.parseInt(separate[0]));
+            right.add(i, Integer.parseInt(separate[1]));
+        }
+        Collections.sort(left);
+        Collections.sort(right);
+        for (int j = 0; j < left.size();j++){
+            int searchNum = left.get(j);
+            int repeat = 0;
+            for(int k = 0; k < right.size(); k++){
+                if(right.get(k) == searchNum){
+                    repeat++;
                 }
             }
-
+            answer+= searchNum*repeat;
         }
-        return -1;
+        return answer;
     }
 
     public static ArrayList<String> getFileData(String fileName) {
